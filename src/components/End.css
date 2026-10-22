@@ -548,6 +548,11 @@
     font-size: 72px;
   }
 
+  .mog__bubble {
+    left: 55%;
+    font-size: 13px;
+  }
+
   .mog__stats {
     grid-area: stats;
   }
