@@ -6,11 +6,11 @@ import { clearSelection, newBoard, resetBoard, steps, tapOp, tapTile, undo, type
 import { createClock } from "../game/clock";
 import type { Op } from "../game/math";
 import type { Puzzle } from "../game/puzzles";
-import { getBest, recordWin } from "../game/storage";
+import { getBest, nextQuip, recordWin } from "../game/storage";
 import { schedule } from "../lib/schedule";
 import { CardTable, type ExitPlan } from "./CardTable";
 import { OpBar, StepsTicker } from "./Controls";
-import { HIT_WORDS, MISTAKES, OP_STYLE, pick, WIN_HIT } from "./copy";
+import { HIT_WORDS, MISTAKES, MOG_QUIPS, OP_STYLE, pick, WIN_HIT } from "./copy";
 import type { EndHandlers } from "./End";
 import { GoalPanel, RaceTrack, Timer } from "./Hud";
 import { Intro } from "./Intro";
@@ -40,6 +40,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
   const [miss, setMiss] = useState(false);
   const [tension, setTension] = useState(false);
   const [result, setResult] = useState<{ time: number; newBest: boolean; prevBest?: number } | null>(null);
+  const [quip, setQuip] = useState(MOG_QUIPS[0]);
   const [showEnd, setShowEnd] = useState(false);
 
   const phaseRef = useRef<Phase>("intro");
@@ -95,6 +96,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
     clock.stop();
     toPhase("lost");
     setTension(false);
+    setQuip(MOG_QUIPS[nextQuip(MOG_QUIPS.length)]);
     sfx.scottWins();
     fx.flash("#ff3d54");
     fx.shake(1.5);
@@ -295,7 +297,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
       {intro && <Intro puzzle={puzzle} full={fullIntro} onDeal={onDeal} onGo={onGo} onDone={onIntroDone} />}
       {phase === "lost" && !showEnd && <TimeUp text={puzzle.kind === "scott" ? "Scott finished!" : "Too slow!"} />}
       {phase === "won" && showEnd && result && <WinScreen puzzle={puzzle} {...result} steps={steps(board)} {...handlers} />}
-      {phase === "lost" && showEnd && <MoggedScreen puzzle={puzzle} movesMade={movesMade} {...handlers} />}
+      {phase === "lost" && showEnd && <MoggedScreen puzzle={puzzle} movesMade={movesMade} quip={quip} {...handlers} />}
     </div>
   );
 }

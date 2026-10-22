@@ -5,6 +5,7 @@ import { createClock } from "./clock";
 import { applyOp, formatStep, isValidSolution } from "./math";
 import { randomPuzzle, SCOTT_RUNS, scottPuzzle, type Mode } from "./puzzles";
 import { solve } from "./solver";
+import { nextQuip } from "./storage";
 
 function seeded(seed: number) {
   return () => {
@@ -144,6 +145,18 @@ describe("board", () => {
     const [fresh] = resetBoard(undone);
     expect(fresh.tiles.map((t) => t.id)).toEqual(["c0", "c1", "c2", "c3"]);
     expect(fresh.history).toEqual([]);
+  });
+});
+
+describe("nextQuip", () => {
+  it("cycles through every quip in order and remembers where it left off", () => {
+    const store = new Map<string, string>();
+    globalThis.localStorage = {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => void store.set(k, v),
+    } as Storage;
+    expect([0, 1, 2, 3].map(() => nextQuip(3))).toEqual([0, 1, 2, 0]);
+    expect(nextQuip(3)).toBe(1);
   });
 });
 

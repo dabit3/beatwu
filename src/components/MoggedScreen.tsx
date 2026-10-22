@@ -11,6 +11,8 @@ import "./End.css";
 interface MoggedProps extends EndHandlers {
   puzzle: Puzzle;
   movesMade: number;
+  /** The kid's line for this loss. */
+  quip: string;
 }
 
 /**
@@ -19,7 +21,7 @@ interface MoggedProps extends EndHandlers {
  * End.css carry the timeline; the sound cues below are timed to match.
  * Any click or key skips straight to the end.
  */
-export function MoggedScreen({ puzzle, movesMade, ...handlers }: MoggedProps) {
+export function MoggedScreen({ puzzle, movesMade, quip, ...handlers }: MoggedProps) {
   const fx = useFx();
   const [skipped, setSkipped] = useState(false);
   const [reveal, setReveal] = useState(false);
@@ -115,7 +117,7 @@ export function MoggedScreen({ puzzle, movesMade, ...handlers }: MoggedProps) {
             <div className="mog__shades tl" ref={shadesRef} aria-hidden="true">
               <PixelShades />
             </div>
-            <p className="mog__bubble bubble bubble--left tl">that got too easy.</p>
+            <p className="mog__bubble bubble bubble--left tl">{quip}</p>
           </div>
           <span className="mog__caption caption tl">Meanwhile, at the medal ceremony…</span>
         </div>

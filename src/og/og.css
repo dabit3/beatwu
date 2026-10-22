@@ -296,8 +296,8 @@
   filter: drop-shadow(4px 4px 0 var(--ink));
 }
 
-.og-icon span {
+.og-icon img {
   position: relative;
-  font-size: 60px;
-  color: var(--red);
+  width: 124px;
+  height: 124px;
 }

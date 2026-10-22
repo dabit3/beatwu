@@ -52,12 +52,12 @@ export function OgCard() {
   );
 }
 
-/** 180×180 home-screen icon, captured to public/apple-touch-icon.png. */
+/** 180×180 home-screen icon, captured to public/apple-touch-icon.png: the favicon card on a starburst. */
 export function OgIcon() {
   return (
     <div className="og-icon">
       <Starburst fill="#ffd23f" points={12} seed={9} strokeWidth={6} />
-      <span className="comic outline">VS.</span>
+      <img src="/favicon.svg" alt="" />
     </div>
   );
 }

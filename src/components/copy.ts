@@ -32,6 +32,20 @@ export const OP_STYLE: Record<Op, { fill: string; color: string }> = {
 
 export const SCOTT_HITS = ["HIM.", "TOO\nEASY", "+AURA", "COOKING", "LOCKED\nIN", "SPEED\nRUN"];
 
+/** What the small kid in the photo says when you lose. Each loss shows the next one; the first is Scott's real line. */
+export const MOG_QUIPS = [
+  "that got too easy.",
+  "skill issue.",
+  "pemdas? i barely know her.",
+  "the math is mathing. you're not.",
+  "aura check: failed.",
+  "i did it in my head.",
+  "carry the one, champ.",
+  "imagine losing to me.",
+  "brb, collecting another medal.",
+  "that's −1000 aura.",
+];
+
 export const HOLY = ["HOLY HYPOTENUSE!", "HOLY LONG DIVISION!", "HOLY PRIME FACTORS!", "HOLY ORDER OF OPERATIONS!", "HOLY ARITHMETIC!"];
 
 export function pick<T>(items: readonly T[]): T {

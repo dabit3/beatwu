@@ -297,12 +297,15 @@
   height: auto;
 }
 
+/* Quips vary in length, so the bubble wraps to stay inside the frame. */
 .mog__bubble {
   position: absolute;
   left: 61%;
   top: 55%;
+  width: max-content;
+  max-width: 37%;
   font-size: clamp(13px, 1.7vw, 18px);
-  white-space: nowrap;
+  text-wrap: balance;
   animation: pop 0.35s 3.65s cubic-bezier(0.2, 0.9, 0.3, 1.5) both;
 }
 
@@ -456,6 +459,7 @@
 
   .mog__bubble {
     left: 58%;
+    max-width: 40%;
   }
 }
 
@@ -550,6 +554,7 @@
 
   .mog__bubble {
     left: 55%;
+    max-width: 43%;
     font-size: 13px;
   }
 

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- A tilted playing card with a red heart, drawn to stay readable at 16px. -->
+  <g transform="translate(2.5 3) rotate(-12 31 30.5)">
+    <rect x="12" y="5.5" width="38" height="50" rx="7" fill="#120a2b" />
+  </g>
+  <g transform="rotate(-12 31 30.5)">
+    <rect x="12" y="5.5" width="38" height="50" rx="7" fill="#fffdf6" stroke="#120a2b" stroke-width="4" />
+    <path
+      transform="translate(31 30.5) scale(1.1) translate(-32 -32.5)"
+      d="M32 44C21 36.5 18 30 20.5 25.5C23 21 29 21 32 26C35 21 41 21 43.5 25.5C46 30 43 36.5 32 44Z"
+      fill="#ff3d54"
+      stroke="#120a2b"
+      stroke-width="3"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>
