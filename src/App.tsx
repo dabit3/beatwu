@@ -1,0 +1,71 @@
+import { MotionConfig } from "motion/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { sfx } from "./audio/sfx";
+import { Backdrop, MuteButton, useSpinTransition } from "./components/Chrome";
+import { Game } from "./components/Game";
+import { Menu } from "./components/Menu";
+import { FxProvider } from "./fx/FxLayer";
+import { makePuzzle, type DealKind, type Mode, type Puzzle } from "./game/puzzles";
+import { getMuted, setMuted as saveMuted } from "./game/storage";
+
+type View = { name: "menu" } | { name: "game"; puzzle: Puzzle; round: number; fullIntro: boolean };
+
+export default function App() {
+  const stageRef = useRef<HTMLElement>(null);
+  const round = useRef(0);
+  const [view, setView] = useState<View>({ name: "menu" });
+  const [kind, setKind] = useState<DealKind>("scott");
+  const [muted, setMuted] = useState(getMuted);
+  const transition = useSpinTransition();
+
+  useEffect(() => {
+    sfx.setMuted(muted);
+    saveMuted(muted);
+  }, [muted]);
+
+  useEffect(() => {
+    const unlock = () => sfx.unlock();
+    window.addEventListener("pointerdown", unlock);
+    window.addEventListener("keydown", unlock);
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
+  const play = useCallback(
+    (mode: Mode, dealKind: DealKind, fullIntro: boolean) => {
+      setKind(dealKind);
+      transition.go(() => setView({ name: "game", puzzle: makePuzzle(mode, dealKind), round: ++round.current, fullIntro }));
+    },
+    [transition.go],
+  );
+
+  const toMenu = useCallback(() => transition.go(() => setView({ name: "menu" })), [transition.go]);
+  const onPlayFromMenu = useCallback((mode: Mode) => play(mode, kind, true), [play, kind]);
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <FxProvider shakeRef={stageRef}>
+        <main className="stage" ref={stageRef}>
+          <Backdrop />
+          {view.name === "menu" ? (
+            <Menu kind={kind} onKind={setKind} onPlay={onPlayFromMenu} />
+          ) : (
+            <Game
+              key={view.round}
+              puzzle={view.puzzle}
+              fullIntro={view.fullIntro}
+              onRematch={() => play(view.puzzle.mode, view.puzzle.kind, false)}
+              onSwitchMode={() => play(view.puzzle.mode === 8 ? 9 : 8, view.puzzle.kind, true)}
+              onNewDeal={() => play(view.puzzle.mode, "random", false)}
+              onMenu={toMenu}
+            />
+          )}
+        </main>
+        <MuteButton muted={muted} onToggle={() => setMuted((m) => !m)} />
+        {transition.overlay}
+      </FxProvider>
+    </MotionConfig>
+  );
+}

@@ -1,0 +1,476 @@
+:root {
+  --ink: #120a2b;
+  --paper: #fff7e3;
+  --yellow: #ffd23f;
+  --red: #ff3d54;
+  --cyan: #22d3ee;
+  --green: #23d18b;
+  --pink: #ff4fa3;
+  --purple: #7b2ff7;
+  --night: #1b0f3f;
+  --night-2: #2b1766;
+  --font-comic: "Bangers", "Impact", "Arial Black", system-ui, sans-serif;
+  --font-ui: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --shadow: 5px 5px 0 var(--ink);
+  --shadow-sm: 3px 3px 0 var(--ink);
+  --halftone: radial-gradient(rgba(18, 10, 43, 0.13) 1.1px, transparent 1.5px) 0 0 / 7px 7px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--night);
+  color: #fff;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.nocase {
+  text-transform: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Stage and backdrop */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 28%, #3c1f8a 0%, #25135c 45%, #130a31 100%);
+}
+
+.backdrop__rays {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 230vmax;
+  height: 230vmax;
+  translate: -50% -50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.05) 0deg 7deg, transparent 7deg 14deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 55%);
+  mask-image: radial-gradient(circle, #000 0%, transparent 55%);
+  animation: spin 120s linear infinite;
+}
+
+.backdrop__dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1.3px, transparent 1.8px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(130% 100% at 50% 40%, transparent 38%, #000 100%);
+  mask-image: radial-gradient(130% 100% at 50% 40%, transparent 38%, #000 100%);
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-8deg);
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-from {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) rotate(-2deg);
+  }
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: scale(3) rotate(-20deg);
+  }
+}
+
+/* Comic type */
+
+.comic {
+  font-family: var(--font-comic);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 0.9;
+}
+
+.outline {
+  -webkit-text-stroke: 0.12em var(--ink);
+  paint-order: stroke fill;
+}
+
+/* Bangers draws 7 almost exactly like 1, so every number the player must read uses Inter. */
+.num {
+  font-family: var(--font-ui);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.num.outline {
+  -webkit-text-stroke-width: 0.09em;
+}
+
+.kicker {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  padding: 0.5em 1.15em 0.4em;
+  font-family: var(--font-comic);
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.2s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+
+.btn:active:not(:disabled) {
+  transform: translate(4px, 4px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.btn--red {
+  background: var(--red);
+  color: #fff;
+}
+
+.btn--cyan {
+  background: var(--cyan);
+}
+
+.btn--paper {
+  background: var(--paper);
+}
+
+.btn--dark {
+  background: #34206f;
+  color: #fff;
+}
+
+.btn--small {
+  font-size: 1.05rem;
+  padding: 0.45em 0.9em 0.35em;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn kbd {
+  font-family: var(--font-ui);
+  font-size: 0.6em;
+  font-weight: 800;
+  letter-spacing: 0;
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+  border: 2px solid currentColor;
+  opacity: 0.6;
+}
+
+/* Panels, bubbles, captions */
+
+.panel {
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.bubble {
+  position: relative;
+  isolation: isolate;
+  padding: 0.55em 0.85em;
+  background: #fff;
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+/* The tail sits above the bubble's border (hiding the seam) but below its text. */
+.bubble::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-right: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+
+.bubble--down::after {
+  left: 22px;
+  bottom: -10px;
+  transform: rotate(45deg) skew(12deg, 12deg);
+}
+
+.bubble--left::after {
+  left: -10px;
+  top: 50%;
+  margin-top: -8px;
+  transform: rotate(135deg) skew(12deg, 12deg);
+}
+
+.caption {
+  display: inline-block;
+  padding: 0.35em 0.7em 0.25em;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-comic);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Avatars */
+
+.avatar {
+  --size: 48px;
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+}
+
+.avatar img,
+.avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar--scott img {
+  filter: saturate(1.2) contrast(1.08);
+}
+
+.avatar--scott::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(rgba(18, 10, 43, 0.25) 1px, transparent 1.4px) 0 0 / 4px 4px;
+  mix-blend-mode: multiply;
+}
+
+/* Floating chrome */
+
+.mute {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 75;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.12s ease;
+}
+
+.mute:active {
+  transform: translate(2px, 2px);
+}
+
+.mute svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Spinning scene transition, after the 1966 TV show's spinning-logo wipe */
+
+.spin {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: all;
+}
+
+.spin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  animation: spin-cover 0.8s ease-in-out forwards;
+}
+
+.spin__emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40vmax;
+  height: 40vmax;
+  animation: spin-emblem 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.spin__emblem svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.spin__emblem span {
+  position: relative;
+  font-family: var(--font-comic);
+  font-size: 11vmax;
+  color: var(--red);
+  -webkit-text-stroke: 0.08em var(--ink);
+  paint-order: stroke fill;
+}
+
+@keyframes spin-emblem {
+  0% {
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    transform: scale(6) rotate(540deg);
+  }
+  100% {
+    transform: scale(0) rotate(1080deg);
+  }
+}
+
+@keyframes spin-cover {
+  0%,
+  38% {
+    opacity: 0;
+  }
+  48%,
+  56% {
+    opacity: 1;
+  }
+  72%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
