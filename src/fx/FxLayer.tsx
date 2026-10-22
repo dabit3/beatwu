@@ -9,6 +9,8 @@ export interface BurstOptions {
   color?: string;
   rotate?: number;
   duration?: number;
+  /** Spinning golden rays behind the burst. */
+  aura?: boolean;
 }
 
 interface BurstSpec {
@@ -21,6 +23,7 @@ interface BurstSpec {
   color: string;
   rotate: number;
   duration: number;
+  aura: boolean;
 }
 
 export interface Fx {
@@ -42,8 +45,12 @@ export function centerOf(el: Element) {
   return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
 }
 
-/** Bangers glyphs run about 0.47em wide; keep the word inside the burst's inner ring. */
-const fontSize = (word: string, size: number) => size * Math.min(0.34, 0.86 / (word.length * 0.47));
+/** Bangers glyphs run about 0.47em wide; keep every line inside the burst's inner ring. */
+function fontSize(word: string, size: number) {
+  const lines = word.split("\n");
+  const longest = Math.max(...lines.map((l) => l.length));
+  return size * Math.min(0.34, 0.86 / (longest * 0.47), 0.6 / lines.length);
+}
 
 export function FxProvider({ shakeRef, children }: { shakeRef: RefObject<HTMLElement | null>; children: ReactNode }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -71,6 +78,7 @@ export function FxProvider({ shakeRef, children }: { shakeRef: RefObject<HTMLEle
         color: o.color ?? "#ff3d54",
         rotate: o.rotate ?? Math.random() * 26 - 13,
         duration: o.duration ?? 760,
+        aura: o.aura ?? false,
       };
       setBursts((all) => [...all.slice(-14), spec]);
       window.setTimeout(() => setBursts((all) => all.filter((s) => s.id !== id)), spec.duration + 60);
@@ -113,7 +121,7 @@ export function FxProvider({ shakeRef, children }: { shakeRef: RefObject<HTMLEle
         {bursts.map((b) => (
           <div
             key={b.id}
-            className="fx-burst"
+            className={`fx-burst ${b.aura ? "fx-burst--aura" : ""}`}
             style={{ left: b.x, top: b.y, width: b.size, height: b.size, "--rot": `${b.rotate}deg`, "--dur": `${b.duration}ms` } as CSSProperties}
           >
             <Starburst fill={b.fill} seed={b.id * 7 + 3} />

@@ -24,13 +24,11 @@ export default function App() {
   }, [muted]);
 
   useEffect(() => {
+    // Mobile browsers only allow audio to start from a finished tap (pointerup/touchend), not a touch-down.
+    const events = ["pointerdown", "pointerup", "touchend", "keydown"] as const;
     const unlock = () => sfx.unlock();
-    window.addEventListener("pointerdown", unlock);
-    window.addEventListener("keydown", unlock);
-    return () => {
-      window.removeEventListener("pointerdown", unlock);
-      window.removeEventListener("keydown", unlock);
-    };
+    events.forEach((e) => window.addEventListener(e, unlock));
+    return () => events.forEach((e) => window.removeEventListener(e, unlock));
   }, []);
 
   const play = useCallback(

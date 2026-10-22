@@ -1,0 +1,303 @@
+.og {
+  position: relative;
+  width: 1200px;
+  height: 630px;
+  overflow: hidden;
+  background: radial-gradient(120% 100% at 30% 30%, #3c1f8a 0%, #25135c 50%, #130a31 100%);
+}
+
+.og__rays {
+  position: absolute;
+  left: 30%;
+  top: 42%;
+  width: 2400px;
+  height: 2400px;
+  translate: -50% -50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.06) 0deg 6deg, transparent 6deg 12deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 45%);
+  mask-image: radial-gradient(circle, #000 0%, transparent 45%);
+}
+
+.og__dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1.4px, transparent 1.9px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(120% 100% at 40% 40%, transparent 40%, #000 100%);
+  mask-image: radial-gradient(120% 100% at 40% 40%, transparent 40%, #000 100%);
+}
+
+/* Masthead */
+
+.og__left {
+  position: absolute;
+  left: 60px;
+  top: 86px;
+  width: 620px;
+  display: grid;
+  justify-items: center;
+}
+
+.og__logo {
+  display: grid;
+  justify-items: center;
+  transform: rotate(-4deg);
+}
+
+.og__scott,
+.og__you {
+  line-height: 0.86;
+}
+
+.og__scott {
+  font-size: 148px;
+  color: var(--yellow);
+  text-shadow:
+    1px 1px 0 var(--ink),
+    2px 2px 0 var(--ink),
+    3px 3px 0 var(--ink),
+    4px 4px 0 var(--ink),
+    5px 5px 0 var(--ink),
+    6px 6px 0 var(--red),
+    7px 7px 0 var(--red),
+    8px 8px 0 var(--red),
+    9px 9px 0 var(--red),
+    10px 10px 0 var(--ink);
+}
+
+.og__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: -110px;
+  font-size: 148px;
+}
+
+.og__you {
+  color: var(--cyan);
+  text-shadow:
+    1px 1px 0 var(--ink),
+    2px 2px 0 var(--ink),
+    3px 3px 0 var(--ink),
+    4px 4px 0 var(--ink),
+    5px 5px 0 var(--ink),
+    6px 6px 0 var(--pink),
+    7px 7px 0 var(--pink),
+    8px 8px 0 var(--pink),
+    9px 9px 0 var(--pink),
+    10px 10px 0 var(--ink);
+}
+
+.og__vs {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 136px;
+  height: 136px;
+  transform: rotate(-10deg);
+}
+
+.og__vs svg,
+.og__burst svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(5px 5px 0 var(--ink));
+}
+
+.og__vs span {
+  position: relative;
+  font-size: 50px;
+  color: #fff;
+}
+
+.og__ribbon {
+  margin-top: 22px;
+  padding: 0.3em 1em 0.2em;
+  font-size: 27px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  background: var(--ink);
+  border: 4px solid var(--yellow);
+  transform: rotate(2deg);
+}
+
+.og__tag {
+  margin: 24px 0 0;
+  padding: 0.4em 0.75em 0.3em;
+  font-size: 33px;
+  line-height: 1.12;
+  text-align: center;
+  border-width: 4px;
+  box-shadow: 6px 6px 0 var(--ink);
+  transform: rotate(-2deg);
+}
+
+
+
+
+
+
+/* The photo panel: the small kid gets shades, a spotlight, and an aura */
+
+.og__panel {
+  position: absolute;
+  top: 64px;
+  right: 62px;
+  width: 470px;
+  transform: rotate(3deg);
+}
+
+.og__frame {
+  /* Shows mogged.png x 0–320, y 0–300 at 1.46875×. The small kid's eyes sit at (78px, 244px). */
+  position: relative;
+  height: 440px;
+  overflow: hidden;
+  background: var(--ink);
+  border: 5px solid var(--ink);
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 9px var(--paper),
+    0 0 0 13px var(--ink),
+    16px 18px 0 13px var(--ink);
+}
+
+.og__frame img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 654px;
+  filter: contrast(1.1) saturate(1.3);
+}
+
+.og__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(circle at 78px 244px, transparent 0 64px, rgba(10, 5, 28, 0.4) 150px, rgba(10, 5, 28, 0.68) 330px);
+}
+
+.og__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(rgba(18, 10, 43, 0.2) 1px, transparent 1.4px) 0 0 / 5px 5px;
+  mix-blend-mode: multiply;
+}
+
+.og__aura {
+  position: absolute;
+  left: 78px;
+  top: 244px;
+  z-index: 2;
+  width: 560px;
+  height: 560px;
+  translate: -50% -50%;
+  background: repeating-conic-gradient(from 4deg, rgba(255, 210, 63, 0.75) 0deg 6deg, transparent 6deg 18deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 0 13%, #000 20%, transparent 55%);
+  mask-image: radial-gradient(circle, transparent 0 13%, #000 20%, transparent 55%);
+  mix-blend-mode: screen;
+}
+
+.og__shades {
+  position: absolute;
+  left: 78px;
+  top: 244px;
+  z-index: 3;
+  width: 66px;
+  translate: -50% -40%;
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.4));
+}
+
+.og__shades svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.og__bubble {
+  position: absolute;
+  left: 140px;
+  top: 214px;
+  z-index: 3;
+  font-size: 23px;
+  white-space: nowrap;
+}
+
+.og__burst {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 196px;
+  height: 196px;
+  rotate: 12deg;
+}
+
+.og__burst::before {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 210, 63, 0.75) 0deg 5deg, transparent 5deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 25%, transparent 66%);
+  mask-image: radial-gradient(circle, #000 25%, transparent 66%);
+}
+
+.og__burst span {
+  position: relative;
+  font-size: 50px;
+  line-height: 0.9;
+  text-align: center;
+  color: var(--red);
+  rotate: -6deg;
+}
+
+.og__stamp {
+  position: absolute;
+  right: 88px;
+  bottom: 30px;
+  padding: 0.18em 0.5em 0.08em;
+  font-size: 54px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  background: var(--red);
+  border: 5px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  -webkit-text-stroke: 0.1em var(--ink);
+  paint-order: stroke fill;
+  rotate: -5deg;
+}
+
+/* Home-screen icon */
+
+.og-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #4a25a0, #1b0f3f 75%);
+}
+
+.og-icon svg {
+  position: absolute;
+  width: 152px;
+  height: 152px;
+  overflow: visible;
+  filter: drop-shadow(4px 4px 0 var(--ink));
+}
+
+.og-icon span {
+  position: relative;
+  font-size: 60px;
+  color: var(--red);
+}

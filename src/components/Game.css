@@ -1,16 +1,18 @@
 .game {
   /* 112px keeps nine cards on one row inside the 1180px column. */
-  --card-w: clamp(60px, min(9.4vw, 15vh), 112px);
-  --op: clamp(56px, min(6.4vw, 10vh), 78px);
+  --card-w: clamp(60px, min(9.4vw, calc(15 * var(--vh))), 112px);
+  --op: clamp(56px, min(6.4vw, calc(10 * var(--vh))), 78px);
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(10px, 1.9vh, 22px);
-  padding: max(12px, env(safe-area-inset-top)) 18px max(14px, env(safe-area-inset-bottom));
+  gap: clamp(10px, calc(1.9 * var(--vh)), 22px);
+  padding: max(12px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom))
+    max(18px, env(safe-area-inset-left));
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .game > section,
@@ -73,7 +75,7 @@
 }
 
 .goal__num {
-  font-size: clamp(40px, min(5.2vw, 8vh), 70px);
+  font-size: clamp(40px, min(5.2vw, calc(8 * var(--vh))), 70px);
   color: #fff;
   text-shadow:
     3px 3px 0 var(--ink),
@@ -100,7 +102,7 @@
 
 .timer__num {
   font-family: var(--font-ui);
-  font-size: clamp(40px, min(5vw, 8vh), 64px);
+  font-size: clamp(40px, min(5vw, calc(8 * var(--vh))), 64px);
   font-weight: 900;
   font-style: italic;
   line-height: 1;
@@ -502,8 +504,15 @@
   color: rgba(18, 10, 43, 0.72);
 }
 
-.card:not(:disabled):hover .face {
-  box-shadow: 6px 8px 0 var(--ink);
+@media (hover: hover) {
+  .card:not(:disabled):hover .face {
+    box-shadow: 6px 8px 0 var(--ink);
+  }
+
+  .card.is-target:hover .card__aim {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .card.is-selected .face {
@@ -564,7 +573,6 @@
   fill: currentColor;
 }
 
-.card.is-target:hover .card__aim,
 .card.is-target:focus-visible .card__aim {
   opacity: 1;
   transform: none;
@@ -679,9 +687,11 @@
   background: var(--green);
 }
 
-.op:hover:not(:disabled) {
-  transform: translateY(-3px) rotate(-8deg);
-  box-shadow: 5px 8px 0 var(--ink);
+@media (hover: hover) {
+  .op:hover:not(:disabled) {
+    transform: translateY(-3px) rotate(-8deg);
+    box-shadow: 5px 8px 0 var(--ink);
+  }
 }
 
 .op:active:not(:disabled) {
@@ -710,6 +720,11 @@
 .controls__aux {
   display: flex;
   gap: 10px;
+}
+
+/* Icons stand in for the labels only in the squeezed one-row layouts below. */
+.aux svg {
+  display: none;
 }
 
 .btn.is-nudge {
@@ -977,7 +992,7 @@
   display: grid;
   grid-template-rows: auto 1fr;
   justify-items: center;
-  padding-top: clamp(40px, 12vh, 140px);
+  padding-top: clamp(40px, calc(12 * var(--vh)), 140px);
   background: rgba(14, 7, 36, 0.6);
 }
 
@@ -1019,7 +1034,7 @@
 }
 
 .count__goal b {
-  font-size: clamp(56px, min(8.5vw, 12vh), 108px);
+  font-size: clamp(56px, min(8.5vw, calc(12 * var(--vh))), 108px);
   color: #fff;
   text-shadow:
     4px 4px 0 var(--ink),
@@ -1121,9 +1136,9 @@
 
 @media (max-width: 760px) {
   .game {
-    --card-w: min(calc((100vw - 24px - 4 * 9px) / 5), 13.5vh);
+    --card-w: min(calc((100vw - 24px - 4 * 9px) / 5), calc(13.5 * var(--vh)));
     --op: 58px;
-    padding-inline: 12px;
+    padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
   }
 
   .game__bar {
@@ -1200,5 +1215,344 @@
 
   .ticker__count {
     display: none;
+  }
+}
+
+/* Very narrow phones: drop the title so the menu and mute buttons fit. */
+@media (max-width: 359px) {
+  .game__title {
+    display: none;
+  }
+}
+
+/*
+ * Short portrait screens, which is most phones once the browser toolbars take
+ * their share: a tighter HUD, and Undo/Reset shrink to icons beside the
+ * operators, so the whole round fits without scrolling.
+ */
+@media (max-width: 760px) and (max-height: 740px) {
+  .game {
+    --card-w: min(calc((100vw - 24px - 4 * 8px) / 5), calc(12.5 * var(--vh)));
+    --op: min(52px, calc((100vw - 158px) / 4));
+    gap: 8px;
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  .game__bar {
+    min-height: 38px;
+    padding-right: 50px;
+  }
+
+  .game__bar .btn {
+    font-size: 0.95rem;
+    padding: 0.42em 0.75em 0.32em;
+  }
+
+  .game__title {
+    font-size: 19px;
+  }
+
+  .hud {
+    gap: 8px;
+  }
+
+  .goal {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 10px 8px;
+  }
+
+  .goal__num {
+    font-size: 34px;
+  }
+
+  .timer {
+    gap: 2px;
+    padding: 6px 10px;
+  }
+
+  .timer > .kicker {
+    display: none;
+  }
+
+  .timer__num {
+    font-size: 32px;
+  }
+
+  .race {
+    gap: 2px;
+    padding: 4px 10px 6px;
+  }
+
+  .lane {
+    height: 32px;
+  }
+
+  .lane .avatar {
+    --size: 28px !important;
+  }
+
+  .lane__track {
+    margin: 0 26px 0 16px;
+  }
+
+  .fuse {
+    padding-left: 64px;
+  }
+
+  .race__bubble {
+    font-size: 12px;
+  }
+
+  .race__think {
+    left: 22px;
+    bottom: 22px;
+  }
+
+  .table {
+    min-height: calc(var(--card-w) * 1.4 + 22px);
+  }
+
+  .cards {
+    gap: 8px;
+    padding: 14px 0 6px;
+  }
+
+  .controls {
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .ops,
+  .controls__aux {
+    gap: 8px;
+  }
+
+  .aux {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .aux svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+
+  .aux__label {
+    display: none;
+  }
+
+  .ticker {
+    min-height: 34px;
+  }
+
+  .ticker__step {
+    font-size: 13px;
+  }
+}
+
+/* Very short screens drop the moves ticker; result cards still show their formulas. */
+@media (max-width: 760px) and (max-height: 600px) {
+  .ticker {
+    display: none;
+  }
+}
+
+/* The narrowest phones get two rows of controls rather than tiny buttons. */
+@media (max-width: 340px) and (max-height: 740px) {
+  .game {
+    --op: 50px;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+  }
+}
+
+/* Phones held sideways: one row of cards, the HUD in one band, no moves ticker. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .game {
+    --card-w: min(
+      calc((100vw - 2 * max(16px, env(safe-area-inset-left)) - 8 * 8px) / 9),
+      calc((100 * var(--vh) - 222px) / 1.4)
+    );
+    --op: 46px;
+    gap: 6px;
+    padding: max(6px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
+
+  .game__bar {
+    min-height: 32px;
+    padding-right: 46px;
+  }
+
+  .game__bar .btn {
+    font-size: 0.9rem;
+    padding: 0.36em 0.7em 0.28em;
+  }
+
+  .game__title {
+    font-size: 18px;
+  }
+
+  .hud {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "goal race timer";
+    gap: 10px;
+  }
+
+  .goal {
+    grid-area: goal;
+    padding: 4px 14px 6px;
+  }
+
+  .goal__num {
+    font-size: 34px;
+  }
+
+  .timer {
+    grid-area: timer;
+    justify-items: end;
+    gap: 2px;
+    min-width: 0;
+    padding: 6px 12px;
+  }
+
+  .timer > .kicker {
+    display: none;
+  }
+
+  .timer__num {
+    font-size: 32px;
+  }
+
+  .race {
+    grid-area: race;
+    gap: 0;
+    padding: 4px 12px;
+  }
+
+  .lane {
+    grid-template-columns: 44px minmax(0, 1fr);
+    height: 30px;
+  }
+
+  .lane .avatar {
+    --size: 26px !important;
+  }
+
+  .lane__track {
+    margin: 0 26px 0 14px;
+  }
+
+  .fuse {
+    padding-left: 58px;
+  }
+
+  .race__bubble {
+    font-size: 12px;
+  }
+
+  .table {
+    min-height: calc(var(--card-w) * 1.4 + 18px);
+  }
+
+  .cards {
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 14px 0 4px;
+  }
+
+  .controls {
+    flex-wrap: nowrap;
+    gap: 14px;
+  }
+
+  .ops {
+    gap: 10px;
+  }
+
+  .aux {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .aux svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .aux__label {
+    display: none;
+  }
+
+  .ticker {
+    display: none;
+  }
+
+  .vs__side {
+    gap: 6px;
+  }
+
+  .vs__side .avatar {
+    --size: 92px !important;
+  }
+
+  .vs__side h2 {
+    font-size: 40px;
+  }
+
+  .vs__time {
+    font-size: 24px;
+  }
+
+  .vs__badge {
+    width: 110px;
+  }
+
+  .vs__badge span {
+    font-size: 44px;
+  }
+
+  .intro--count {
+    padding-top: max(10px, env(safe-area-inset-top));
+  }
+
+  .count__top {
+    gap: 6px;
+  }
+
+  .count__top .caption {
+    font-size: 14px;
+  }
+
+  .count__goal {
+    padding: 4px 22px 8px;
+  }
+
+  .count__goal b {
+    font-size: 48px;
+  }
+
+  .count__num {
+    width: 120px;
+  }
+
+  .count__num span {
+    font-size: 64px;
+  }
+
+  .count__num--go span {
+    font-size: 50px;
   }
 }

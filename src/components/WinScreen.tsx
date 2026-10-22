@@ -5,7 +5,7 @@ import type { Step } from "../game/math";
 import type { Puzzle } from "../game/puzzles";
 import { schedule } from "../lib/schedule";
 import { ScottAvatar, YouAvatar } from "./Avatars";
-import { HOLY, pick } from "./copy";
+import { HOLY, PARTY, pick } from "./copy";
 import { EndActions, Solutions, type EndHandlers } from "./End";
 import { formatTime } from "./Hud";
 import "./End.css";
@@ -17,8 +17,6 @@ interface WinProps extends EndHandlers {
   prevBest?: number;
   steps: Step[];
 }
-
-const PARTY = ["POW!", "BAM!", "ZOWIE!", "WHAM!", "KAPOW!", "BIFF!"];
 
 export function WinScreen({ puzzle, time, newBest, prevBest, steps, ...handlers }: WinProps) {
   const fx = useFx();
@@ -34,8 +32,9 @@ export function WinScreen({ puzzle, time, newBest, prevBest, steps, ...handlers 
           () => {
             const side = i % 2 ? 0.85 : 0.15;
             fx.burst(innerWidth * (side + (Math.random() - 0.5) * 0.1), innerHeight * (0.2 + Math.random() * 0.55), word, {
-              size: 100 + Math.random() * 50,
+              size: 125 + Math.random() * 45,
               fill: pick(["#ffd23f", "#22d3ee", "#ff4fa3", "#23d18b"]),
+              aura: true,
             });
             sfx.hit(i % 2 ? "+" : "*", 0.7);
           },

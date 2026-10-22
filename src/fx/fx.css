@@ -33,13 +33,27 @@
 .fx-burst span {
   position: relative;
   font-family: var(--font-comic);
-  line-height: 0.9;
+  line-height: 0.92;
   letter-spacing: 0.02em;
-  white-space: nowrap;
+  text-align: center;
+  white-space: pre;
   -webkit-text-stroke: 0.1em var(--ink);
   paint-order: stroke fill;
   text-shadow: 0.05em 0.06em 0 var(--ink);
   transform: rotate(-5deg);
+}
+
+/* Big plays radiate: golden rays spin out from behind the burst. */
+.fx-burst--aura::before {
+  content: "";
+  position: absolute;
+  inset: -55%;
+  z-index: -1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 210, 63, 0.85) 0deg 5deg, transparent 5deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 22%, transparent 66%);
+  mask-image: radial-gradient(circle, #000 22%, transparent 66%);
+  animation: spin 2.6s linear infinite;
 }
 
 @keyframes fx-burst {

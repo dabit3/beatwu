@@ -1,12 +1,26 @@
 import type { Op } from "../game/math";
 import type { Puzzle } from "../game/puzzles";
 
-/** Sound-effect words from the 1966 TV show's fight scenes, grouped by how hard each operator hits. */
+/*
+ * What pops out of the starbursts: aura points, internet slang, and math puns.
+ * "\n" marks where a burst breaks the line.
+ */
+
 export const HIT_WORDS: Record<Op, string[]> = {
-  "+": ["ZAP!", "ZOK!", "BOFF!", "ZING!"],
-  "-": ["WHACK!", "THWACK!", "BIFF!", "SOCK!"],
-  "*": ["KAPOW!", "BAM!", "WHAM!", "ZOWIE!", "KRUNCH!"],
-  "/": ["SPLAT!", "ZLONK!", "KLONK!", "SWISH!"],
+  "+": ["+100\nAURA", "SUM-THING\nELSE", "AURA\nSTACKED", "PLUS\nULTRA"],
+  "-": ["DIFFERENCE\nMAKER", "MINUS\nTHE OPPS", "TAKE\nTHAT", "+250\nAURA"],
+  "*": ["AURA\n×10", "+1000\nAURA", "VERY\nPRODUCTIVE", "LOCKED\nIN", "GIGA\nBRAIN"],
+  "/": ["DIVIDE &\nCONQUER", "NO\nREMAINDERS", "SPLIT\nDECISION", "+400\nAURA"],
+};
+
+export const WIN_HIT = "+∞\nAURA";
+
+export const PARTY = ["SCOTT\nWHO?", "AURA\nFARMER", "BUILT\nDIFFERENT", "YOU'RE\nHIM", "+∞\nAURA", "GIGA\nBRAIN"];
+
+export const MISTAKES = {
+  fraction: "NO FRACTIONS\n−500 AURA",
+  zero: "÷0?!\n−∞ AURA",
+  miss: "AURA\nDEBT",
 };
 
 export const OP_STYLE: Record<Op, { fill: string; color: string }> = {
@@ -16,7 +30,7 @@ export const OP_STYLE: Record<Op, { fill: string; color: string }> = {
   "/": { fill: "#23d18b", color: "#ffffff" },
 };
 
-export const SCOTT_HITS = ["POW!", "BAM!", "ZAP!", "BOFF!", "WHAM!"];
+export const SCOTT_HITS = ["HIM.", "TOO\nEASY", "+AURA", "COOKING", "LOCKED\nIN", "SPEED\nRUN"];
 
 export const HOLY = ["HOLY HYPOTENUSE!", "HOLY LONG DIVISION!", "HOLY PRIME FACTORS!", "HOLY ORDER OF OPERATIONS!", "HOLY ARITHMETIC!"];
 

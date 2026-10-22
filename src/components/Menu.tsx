@@ -106,7 +106,11 @@ function ModeCard({ mode, kind, onPlay }: { mode: Mode; kind: DealKind; onPlay: 
         <b className="num">{goal}</b>
       </span>
       <span className="mode__meta">
-        <ScottAvatar size={24} /> Scott's time <b>{run.time.toFixed(1)}s</b>
+        <ScottAvatar size={24} />
+        <span>
+          Scott<span className="mode__label-long">'s time</span>
+        </span>
+        <b>{run.time.toFixed(1)}s</b>
       </span>
       <span className="mode__foot">
         <span className="mode__play comic">

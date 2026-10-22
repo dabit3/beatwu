@@ -60,7 +60,7 @@ export function RaceTrack({ clock, puzzle, phase, yourSteps }: RaceProps) {
   useEffect(() => {
     if (scottSteps > shown.current && phase !== "intro") {
       sfx.scottMove();
-      fx.burstAt(scottRef.current, pick(SCOTT_HITS), { size: 66, fill: "#ffffff", color: "#ff3d54", duration: 620 });
+      fx.burstAt(scottRef.current, pick(SCOTT_HITS), { size: 84, fill: "#ffffff", color: "#ff3d54", duration: 640 });
     }
     shown.current = scottSteps;
   }, [scottSteps, phase, fx]);

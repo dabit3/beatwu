@@ -10,7 +10,7 @@ import { getBest, recordWin } from "../game/storage";
 import { schedule } from "../lib/schedule";
 import { CardTable, type ExitPlan } from "./CardTable";
 import { OpBar, StepsTicker } from "./Controls";
-import { HIT_WORDS, OP_STYLE, pick } from "./copy";
+import { HIT_WORDS, MISTAKES, OP_STYLE, pick, WIN_HIT } from "./copy";
 import type { EndHandlers } from "./End";
 import { GoalPanel, RaceTrack, Timer } from "./Hud";
 import { Intro } from "./Intro";
@@ -78,7 +78,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
         90,
         () => {
           if (at) {
-            fx.burst(at.x, at.y, "KA-BOOM!", { size: 330, duration: 1250 });
+            fx.burst(at.x, at.y, WIN_HIT, { size: 330, duration: 1250, aura: true });
             fx.sparks(at.x, at.y, { count: 70, speed: [6, 19], life: [50, 95] });
           }
           fx.flash();
@@ -131,7 +131,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
         const el = tileEls.current.get(ev.id);
         sfx.error();
         el?.animate(WIGGLE, { duration: 380 });
-        fx.burstAt(el, ev.reason === "zero" ? "NO ÷ 0!" : "NO FRACTIONS!", { size: 200, fill: "#ff3d54", color: "#ffffff" });
+        fx.burstAt(el, MISTAKES[ev.reason], { size: 210, fill: "#ff3d54", color: "#ffffff" });
         return;
       }
       case "combine": {
@@ -139,7 +139,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
         const at = el ? centerOf(el) : null;
         const finished = ev.remaining === 1;
         if (finished && ev.result.value === puzzle.goal) return win(at);
-        const { fill, color } = OP_STYLE[ev.step.op];
+        const { fill, color } = finished ? { fill: "#ff3d54", color: "#ffffff" } : OP_STYLE[ev.step.op];
         const big = ev.step.op === "*";
         sfx.hit(ev.step.op, big ? 1.25 : 1);
         if (at)
@@ -147,7 +147,8 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
             [
               90,
               () => {
-                fx.burst(at.x, at.y - 8, pick(HIT_WORDS[ev.step.op]), { fill, color, size: big ? 170 : 140 });
+                const word = finished ? MISTAKES.miss : pick(HIT_WORDS[ev.step.op]);
+                fx.burst(at.x, at.y - 8, word, { fill, color, size: big ? 178 : 158, aura: big && !finished });
                 fx.sparks(at.x, at.y, { count: big ? 26 : 16, colors: [fill, "#ffffff", "#ffd23f"] });
                 fx.shake(big ? 0.8 : 0.45);
               },
@@ -276,11 +277,15 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
       <section className="controls">
         <OpBar op={board.op} armed={!!board.selected} disabled={!playing} onOp={onOp} />
         <div className="controls__aux">
-          <button className={`btn btn--dark btn--small ${miss ? "is-nudge" : ""}`} onClick={onUndo} disabled={!playing || !movesMade}>
-            Undo <kbd>⌫</kbd>
+          <button className={`btn btn--dark btn--small aux ${miss ? "is-nudge" : ""}`} onClick={onUndo} disabled={!playing || !movesMade} aria-label="Undo">
+            <UndoIcon />
+            <span className="aux__label">Undo</span>
+            <kbd>⌫</kbd>
           </button>
-          <button className={`btn btn--dark btn--small ${miss ? "is-nudge" : ""}`} onClick={onReset} disabled={!playing || !movesMade}>
-            Reset <kbd>R</kbd>
+          <button className={`btn btn--dark btn--small aux ${miss ? "is-nudge" : ""}`} onClick={onReset} disabled={!playing || !movesMade} aria-label="Reset">
+            <ResetIcon />
+            <span className="aux__label">Reset</span>
+            <kbd>R</kbd>
           </button>
         </div>
       </section>
@@ -292,6 +297,25 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
       {phase === "won" && showEnd && result && <WinScreen puzzle={puzzle} {...result} steps={steps(board)} {...handlers} />}
       {phase === "lost" && showEnd && <MoggedScreen puzzle={puzzle} movesMade={movesMade} {...handlers} />}
     </div>
+  );
+}
+
+/** Shown instead of the Undo/Reset labels when the controls squeeze into one row on small screens. */
+function UndoIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 5 4 10l5 5" />
+      <path d="M4 10h10.5a5 5 0 0 1 0 10H11" />
+    </svg>
+  );
+}
+
+function ResetIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" />
+      <path d="M4 4v4h4" />
+    </svg>
   );
 }
 
