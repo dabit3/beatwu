@@ -17,13 +17,14 @@ The player combines every card with + − × ÷ to hit the goal before Scott's t
 - `src/components/` holds the screens: `Menu`, `Game`, `Intro`, `WinScreen`, and `MoggedScreen`.
 - `src/fx/` holds the comic effects: starbursts, particles, flash, and screen shake.
 - `src/audio/sfx.ts` synthesizes every sound with Web Audio. There are no audio files.
-- `src/components/copy.ts` holds all burst text (aura points, slang, math puns) and Scott's quotes. `\n` sets a burst's line break.
+- `src/components/copy.ts` holds all burst text (aura points, slang, math puns), Scott's quotes, and `MOG_QUIPS`, the kid's lines on the losing screen. Each loss shows the next quip; the position is saved in localStorage. `\n` sets a burst's line break.
 - `MoggedScreen.tsx` imports `mogged.png` straight from the project root. The zoom target (the small kid's eyes) is set by `--fx`, `--fy`, and `--s` on `.mog__frame` in `End.css`.
 
 ## Share image and tags
 
 - `index.html` holds the OpenGraph and Twitter tags. `%SITE_URL%` is replaced at build time by a small plugin in `vite.config.ts`, using `SITE_URL` or the host's production URL (Vercel, Netlify, Cloudflare Pages). On any other host, build with `SITE_URL=https://your.domain npm run build`, or previews won't show the image.
 - `public/og.jpg` (1200×630) and `public/apple-touch-icon.png` (180×180) are screenshots of `og.html`, a dev-only page built from `src/og/`. To change them, edit `src/og/`, run the dev server, and capture http://localhost:5173/og.html at 1200×630 (and `og.html#icon` at 180×180). Keep `og.jpg` under about 300 KB so WhatsApp shows it.
+- `public/favicon.svg` (a tilted card with a red heart) is the icon source. `public/favicon-32.png` is a 32×32 capture of it for browsers without SVG icons, and the home-screen icon places it on a starburst. Recapture both after editing the SVG.
 
 ## Mobile
 

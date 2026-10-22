@@ -67,9 +67,11 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
     [clock],
   );
 
+  // The phase changes before the clock stops: stopping emits one last tick,
+  // and that tick must not see a round that is still "playing".
   const win = (at: { x: number; y: number } | null) => {
-    const time = clock.stop();
     toPhase("won");
+    const time = clock.stop();
     setTension(false);
     const prevBest = getBest(puzzle.mode, puzzle.kind);
     setResult({ time, newBest: recordWin(puzzle.mode, puzzle.kind, time), prevBest });
@@ -93,8 +95,8 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
 
   const lose = () => {
     if (phaseRef.current !== "playing") return;
-    clock.stop();
     toPhase("lost");
+    clock.stop();
     setTension(false);
     setQuip(MOG_QUIPS[nextQuip(MOG_QUIPS.length)]);
     sfx.scottWins();
@@ -207,6 +209,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
     if (phase !== "playing") return;
     let nextTick = puzzle.scottTime - 3;
     return clock.subscribe(() => {
+      if (phaseRef.current !== "playing") return;
       const t = clock.getSnapshot();
       if (t >= puzzle.scottTime) return lose();
       if (t >= nextTick) {
