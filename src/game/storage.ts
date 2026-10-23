@@ -5,6 +5,8 @@ const KEY = "scott-wu-vs-you:v1";
 interface Saved {
   best: Record<string, number>;
   muted: boolean;
+  /** Background music on, when sound isn't muted. */
+  music: boolean;
   /** Index of the next losing-screen quip. */
   quip: number;
 }
@@ -12,9 +14,9 @@ interface Saved {
 function read(): Saved {
   try {
     const parsed = JSON.parse(localStorage.getItem(KEY) ?? "{}") as Partial<Saved>;
-    return { best: parsed.best ?? {}, muted: parsed.muted ?? false, quip: parsed.quip ?? 0 };
+    return { best: parsed.best ?? {}, muted: parsed.muted ?? false, music: parsed.music ?? true, quip: parsed.quip ?? 0 };
   } catch {
-    return { best: {}, muted: false, quip: 0 };
+    return { best: {}, muted: false, music: true, quip: 0 };
   }
 }
 
@@ -46,6 +48,12 @@ export const getMuted = () => read().muted;
 
 export function setMuted(muted: boolean) {
   write({ ...read(), muted });
+}
+
+export const getMusic = () => read().music;
+
+export function setMusic(music: boolean) {
+  write({ ...read(), music });
 }
 
 /** Hands out quips in order, picking up where the last visit left off. Returns the index to show now. */

@@ -32,6 +32,9 @@ export const OP_STYLE: Record<Op, { fill: string; color: string }> = {
 
 export const SCOTT_HITS = ["HIM.", "TOO\nEASY", "+AURA", "COOKING", "LOCKED\nIN", "SPEED\nRUN"];
 
+/** swyx's post with the clip of Scott playing, where his times and quotes come from. */
+export const CLIP_URL = "https://x.com/swyx/status/2113098033705664650";
+
 /** What the small kid in the photo says when you lose. Each loss shows the next one; the first is Scott's real line. */
 export const MOG_QUIPS = [
   "that got too easy.",

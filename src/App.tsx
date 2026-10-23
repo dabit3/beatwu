@@ -1,12 +1,13 @@
 import { MotionConfig } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { music } from "./audio/music";
 import { sfx } from "./audio/sfx";
-import { Backdrop, MuteButton, useSpinTransition } from "./components/Chrome";
+import { Backdrop, SoundButton, useSpinTransition, type SoundMode } from "./components/Chrome";
 import { Game } from "./components/Game";
 import { Menu } from "./components/Menu";
 import { FxProvider } from "./fx/FxLayer";
 import { makePuzzle, type DealKind, type Mode, type Puzzle } from "./game/puzzles";
-import { getMuted, setMuted as saveMuted } from "./game/storage";
+import { getMusic, getMuted, setMusic as saveMusic, setMuted as saveMuted } from "./game/storage";
 
 type View = { name: "menu" } | { name: "game"; puzzle: Puzzle; round: number; fullIntro: boolean };
 
@@ -16,6 +17,7 @@ export default function App() {
   const [view, setView] = useState<View>({ name: "menu" });
   const [kind, setKind] = useState<DealKind>("scott");
   const [muted, setMuted] = useState(getMuted);
+  const [musicOn, setMusicOn] = useState(getMusic);
   const transition = useSpinTransition();
 
   useEffect(() => {
@@ -23,10 +25,16 @@ export default function App() {
     saveMuted(muted);
   }, [muted]);
 
+  useEffect(() => saveMusic(musicOn), [musicOn]);
+  useEffect(() => music.setEnabled(musicOn && !muted), [musicOn, muted]);
+
   useEffect(() => {
     // Mobile browsers only allow audio to start from a finished tap (pointerup/touchend), not a touch-down.
     const events = ["pointerdown", "pointerup", "touchend", "keydown"] as const;
-    const unlock = () => sfx.unlock();
+    const unlock = () => {
+      sfx.unlock();
+      music.unlock();
+    };
     events.forEach((e) => window.addEventListener(e, unlock));
     return () => events.forEach((e) => window.removeEventListener(e, unlock));
   }, []);
@@ -41,6 +49,12 @@ export default function App() {
 
   const toMenu = useCallback(() => transition.go(() => setView({ name: "menu" })), [transition.go]);
   const onPlayFromMenu = useCallback((mode: Mode) => play(mode, kind, true), [play, kind]);
+
+  const sound: SoundMode = muted ? "off" : musicOn ? "all" : "sfx";
+  const setSound = (mode: SoundMode) => {
+    setMuted(mode === "off");
+    setMusicOn(mode === "all");
+  };
 
   return (
     <MotionConfig reducedMotion="user">
@@ -61,7 +75,7 @@ export default function App() {
             />
           )}
         </main>
-        <MuteButton muted={muted} onToggle={() => setMuted((m) => !m)} />
+        <SoundButton mode={sound} onChange={setSound} />
         {transition.overlay}
       </FxProvider>
     </MotionConfig>

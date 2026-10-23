@@ -368,6 +368,15 @@
   animation: rise 0.45s 4.3s ease-out both;
 }
 
+.mog__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
 .mog__reveal {
   padding: 4px 8px;
   font-size: 13px;

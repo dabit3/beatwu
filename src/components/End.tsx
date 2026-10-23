@@ -12,7 +12,7 @@ export interface EndHandlers {
 export function EndActions({ puzzle, onRematch, onSwitchMode, onNewDeal, onMenu }: EndHandlers & { puzzle: Puzzle }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLElement && e.target.closest("button")) return;
+      if (e.target instanceof HTMLElement && e.target.closest("button, a")) return;
       if (e.key === "Enter") onRematch();
       else if (e.key === "Escape") onMenu();
     };

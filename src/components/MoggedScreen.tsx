@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import moggedUrl from "../../mogged.png";
+import { music } from "../audio/music";
 import { sfx } from "../audio/sfx";
 import { useFx } from "../fx/FxLayer";
 import type { Puzzle } from "../game/puzzles";
 import { schedule } from "../lib/schedule";
 import { PixelShades } from "./Avatars";
+import { ClipLink } from "./Chrome";
 import { EndActions, Solutions, type EndHandlers } from "./End";
 import "./End.css";
+
+/** The sad trombone's length, plus a beat of silence. */
+const TROMBONE_MS = 3200;
 
 interface MoggedProps extends EndHandlers {
   puzzle: Puzzle;
@@ -25,7 +30,8 @@ export function MoggedScreen({ puzzle, movesMade, quip, ...handlers }: MoggedPro
   const fx = useFx();
   const [skipped, setSkipped] = useState(false);
   const [reveal, setReveal] = useState(false);
-  const trombone = useRef(false);
+  /** When the sad trombone started, from performance.now(); 0 until it plays. */
+  const trombone = useRef(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const shadesRef = useRef<HTMLDivElement>(null);
   const solutionRef = useRef<HTMLDivElement>(null);
@@ -45,10 +51,11 @@ export function MoggedScreen({ puzzle, movesMade, quip, ...handlers }: MoggedPro
   useEffect(() => {
     if (skipped) {
       if (!trombone.current) {
-        trombone.current = true;
+        trombone.current = performance.now();
         sfx.sadTrombone();
       }
-      return;
+      // The band comes back once the trombone has finished.
+      return schedule([[trombone.current + TROMBONE_MS - performance.now(), () => music.setScene("results")]]);
     }
     const onKey = () => trySkip();
     window.addEventListener("keydown", onKey);
@@ -80,7 +87,7 @@ export function MoggedScreen({ puzzle, movesMade, quip, ...handlers }: MoggedPro
       [
         3520,
         () => {
-          trombone.current = true;
+          trombone.current = performance.now();
           sfx.sadTrombone();
         },
       ],
@@ -140,9 +147,13 @@ export function MoggedScreen({ puzzle, movesMade, quip, ...handlers }: MoggedPro
 
         <div className="mog__actions tl">
           <EndActions puzzle={puzzle} {...handlers} />
-          <button className="mog__reveal" onClick={() => setReveal((r) => !r)} aria-expanded={reveal}>
-            {reveal ? "Hide" : "Show"} {puzzle.solutionIsScotts ? "Scott's" : "a"} solution
-          </button>
+          <div className="mog__links">
+            <button className="mog__reveal" onClick={() => setReveal((r) => !r)} aria-expanded={reveal}>
+              {reveal ? "Hide" : "Show"} {puzzle.solutionIsScotts ? "Scott's" : "a"} solution
+            </button>
+            <span aria-hidden="true">·</span>
+            <ClipLink label="Watch Scott do it" className="clip-link--loud" />
+          </div>
           {reveal && (
             <div className="mog__solution" ref={solutionRef}>
               <Solutions puzzle={puzzle} />

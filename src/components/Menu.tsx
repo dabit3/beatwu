@@ -1,10 +1,13 @@
 import { useEffect, type CSSProperties } from "react";
+import devinLogo from "../assets/devin-lockup.svg";
+import { music } from "../audio/music";
 import { sfx } from "../audio/sfx";
 import { Starburst } from "../fx/Starburst";
 import { isRed, type PlayingCard } from "../game/cards";
 import { SCOTT_RUNS, type DealKind, type Mode } from "../game/puzzles";
 import { getBest } from "../game/storage";
 import { ScottAvatar } from "./Avatars";
+import { ClipLink } from "./Chrome";
 import "./Menu.css";
 
 interface MenuProps {
@@ -14,6 +17,8 @@ interface MenuProps {
 }
 
 export function Menu({ kind, onKind, onPlay }: MenuProps) {
+  useEffect(() => music.setScene("menu"), []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -48,7 +53,10 @@ export function Menu({ kind, onKind, onPlay }: MenuProps) {
 
       <div className="pitch">
         <ScottAvatar size={64} />
-        <p className="bubble bubble--left">“You take 8 cards and you make the current year.”</p>
+        <div className="bubble bubble--left">
+          <p>“You take 8 cards and you make the current year.”</p>
+          <ClipLink />
+        </div>
       </div>
 
       <div className="deal" role="radiogroup" aria-label="Which cards">
@@ -82,6 +90,13 @@ export function Menu({ kind, onKind, onPlay }: MenuProps) {
           <b>!</b> Use every card and hit the goal before Scott's time runs out
         </li>
       </ol>
+
+      <footer className="credit">
+        <a href="https://devin.ai/" target="_blank" rel="noopener noreferrer" aria-label="Built by Devin (opens devin.ai in a new tab)">
+          <span>Built by</span>
+          <img src={devinLogo} alt="Devin" width={56} height={17} draggable={false} />
+        </a>
+      </footer>
     </div>
   );
 }

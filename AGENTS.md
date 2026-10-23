@@ -17,7 +17,10 @@ The player combines every card with + − × ÷ to hit the goal before Scott's t
 - `src/components/` holds the screens: `Menu`, `Game`, `Intro`, `WinScreen`, and `MoggedScreen`.
 - `src/fx/` holds the comic effects: starbursts, particles, flash, and screen shake.
 - `src/audio/sfx.ts` synthesizes every sound with Web Audio. There are no audio files.
-- `src/components/copy.ts` holds all burst text (aura points, slang, math puns), Scott's quotes, and `MOG_QUIPS`, the kid's lines on the losing screen. Each loss shows the next quip; the position is saved in localStorage. `\n` sets a burst's line break.
+- `src/audio/music.ts` is the background music: an original 60s surf-spy tune (a 12-bar minor blues in E at 132 BPM), synthesized the same way. It shares the sound effects' context and master volume, so mute silences it too. Screens set its scene with `music.setScene(...)`: `menu`, `intro` (muffled under the VS splash and countdown), `play` (restarts from bar 1 on "GO!"), `tension` (muffled in Scott's final 3 seconds), `end` (stops for the win and lose stingers), and `results` (comes back on the end screens). It pauses in background tabs. `LEVEL` sets its loudness: 0.1 measures about −34 LUFS, roughly 9 dB under a card hit. Tests in `src/audio/music.test.ts` check the song data.
+- The floating sound button cycles through music and effects, effects only, and muted. Both settings are saved in localStorage.
+- `src/components/copy.ts` holds all burst text (aura points, slang, math puns), Scott's quotes, `CLIP_URL` (swyx's post with the original clip, linked from the menu and end screens via `ClipLink` in `Chrome.tsx`), and `MOG_QUIPS`, the kid's lines on the losing screen. Each loss shows the next quip; the position is saved in localStorage. `\n` sets a burst's line break.
+- The menu footer has a "Built by Devin" credit linking to https://devin.ai/. The logo, `src/assets/devin-lockup.svg`, is the official horizontal lockup, made white and cropped to the artwork.
 - `MoggedScreen.tsx` imports `mogged.png` straight from the project root. The zoom target (the small kid's eyes) is set by `--fx`, `--fy`, and `--s` on `.mog__frame` in `End.css`.
 
 ## Share image and tags
@@ -37,3 +40,4 @@ The player combines every card with + − × ÷ to hit the goal before Scott's t
 - Numbers use Inter (the `.num` class), not Bangers, because Bangers draws 7 almost like 1.
 - Division must come out even, and intermediate results may be negative.
 - Dependencies are pinned to exact versions that were at least 7 days old when installed.
+- When automating the game in a browser, launch Chrome with `--mute-audio`, or the test run plays the music out loud.

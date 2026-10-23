@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { music } from "../audio/music";
 import { sfx } from "../audio/sfx";
 import { centerOf, useFx } from "../fx/FxLayer";
 import { Starburst } from "../fx/Starburst";
@@ -67,12 +68,15 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
     [clock],
   );
 
+  useEffect(() => music.setScene("intro"), []);
+
   // The phase changes before the clock stops: stopping emits one last tick,
   // and that tick must not see a round that is still "playing".
   const win = (at: { x: number; y: number } | null) => {
     toPhase("won");
     const time = clock.stop();
     setTension(false);
+    music.setScene("end");
     const prevBest = getBest(puzzle.mode, puzzle.kind);
     setResult({ time, newBest: recordWin(puzzle.mode, puzzle.kind, time), prevBest });
     sfx.hit("*", 1.8);
@@ -98,6 +102,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
     toPhase("lost");
     clock.stop();
     setTension(false);
+    music.setScene("end");
     setQuip(MOG_QUIPS[nextQuip(MOG_QUIPS.length)]);
     sfx.scottWins();
     fx.flash("#ff3d54");
@@ -190,6 +195,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
   const onGo = useCallback(() => {
     setFaceUp(true);
     sfx.flip();
+    music.setScene("play");
     // Start the clock once the cards have finished turning over.
     later([
       [
@@ -215,6 +221,7 @@ export function Game({ puzzle, fullIntro, ...handlers }: GameProps) {
       if (t >= nextTick) {
         const left = puzzle.scottTime - t;
         setTension(true);
+        music.setScene("tension");
         sfx.tick(left <= 1.2);
         nextTick = t + (left <= 1.2 ? 0.25 : 0.5);
       }

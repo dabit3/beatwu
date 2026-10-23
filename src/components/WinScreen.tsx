@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef } from "react";
+import { music } from "../audio/music";
 import { sfx } from "../audio/sfx";
 import { useFx } from "../fx/FxLayer";
 import type { Step } from "../game/math";
 import type { Puzzle } from "../game/puzzles";
 import { schedule } from "../lib/schedule";
 import { ScottAvatar, YouAvatar } from "./Avatars";
+import { ClipLink } from "./Chrome";
 import { HOLY, PARTY, pick } from "./copy";
 import { EndActions, Solutions, type EndHandlers } from "./End";
 import { formatTime } from "./Hud";
@@ -39,6 +41,8 @@ export function WinScreen({ puzzle, time, newBest, prevBest, steps, ...handlers 
             sfx.hit(i % 2 ? "+" : "*", 0.7);
           },
         ]),
+        // The band comes back once the party bursts are done.
+        [320 + PARTY.length * 260 + 400, () => music.setScene("results")],
       ]),
     [fx],
   );
@@ -79,7 +83,10 @@ export function WinScreen({ puzzle, time, newBest, prevBest, steps, ...handlers 
         <EndActions puzzle={puzzle} {...handlers} />
         <div className="scott-says">
           <ScottAvatar size={46} />
-          <p className="bubble bubble--left">Cheers.</p>
+          <div className="bubble bubble--left">
+            <p>Cheers.</p>
+            <ClipLink label="Watch his run" />
+          </div>
         </div>
         <Solutions puzzle={puzzle} yours={steps} />
       </div>

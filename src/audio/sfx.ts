@@ -41,6 +41,12 @@ class Sfx {
     this.ensure();
   }
 
+  /** The shared context, master output, and noise, for the background music. Null without Web Audio. */
+  graph(): { ctx: AudioContext; out: GainNode; noise: AudioBuffer } | null {
+    const ctx = this.ensure();
+    return ctx && this.out && this.noise ? { ctx, out: this.out, noise: this.noise } : null;
+  }
+
   tap() {
     this.tone({ type: "triangle", freq: 900, to: 1400, dur: 0.06, vol: 0.14 });
   }
